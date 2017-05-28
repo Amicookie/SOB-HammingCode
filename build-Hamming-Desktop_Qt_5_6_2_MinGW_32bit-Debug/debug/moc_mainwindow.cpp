@@ -73,7 +73,6 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->on_kuti_sliderMoved((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 1: _t->on_barek_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     }
