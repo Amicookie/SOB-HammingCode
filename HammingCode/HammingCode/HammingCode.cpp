@@ -190,9 +190,12 @@ void hammingAlgorithm(string input) {
 		for (int i = 0; i < inputLength + parityBitsNumber; i++) {
 
 			if ((fmod(log2(i + 1), 1.0)) == 0) {
-				bitWord.append("0");
-			}
-			else {
+				if (i == (inputLength + parityBitsNumber - 1)) {
+					bitWord.append(valueToString(input[counter]));
+					cout << "Since our code is only " << inputLength << " characters long, we don't append another 0 here!" << endl;
+					counter--;
+				} else bitWord.append("0");
+			} else {
 				bitWord.append(valueToString(input[counter]));
 				counter--;
 			}
@@ -211,9 +214,9 @@ void hammingAlgorithm(string input) {
 		string zmienna;
 		vector<string> parityMatrix;
 		vector<int> wynik(8);
-		int wynik1 = 0;
-		int wynik2 = 0;
-		int wynik3 = 0;
+		//int wynik1 = 0;
+		//int wynik2 = 0;
+		//int wynik3 = 0;
 		string resultMatrix;
 
 		for (unsigned i = 0; i < 8; i++) {
@@ -227,12 +230,12 @@ void hammingAlgorithm(string input) {
 
 			zmienna = Dec2Bin(elementsWithValueOfOne.at(i));
 			parityMatrix.push_back(zmienna);
-			cout << parityMatrix << endl;
+			//cout << parityMatrix << endl;
 			for (unsigned j = 0; j < parityMatrix.at(i).length(); j++) {
 
 				//while (parityMatrix.at(i)[j] == '0') continue;
 				if (parityMatrix.at(i)[j] == '1') wynik.at(j)++;
-				cout << wynik.at(j) << " ";
+				//cout << wynik.at(j) << " ";
 			}
 
 			//wynik = 0;
@@ -303,7 +306,7 @@ void hammingAlgorithm(string input) {
 
 				//while (parityMatrix.at(i)[j] == '0') continue;
 				if (parityMatrix.at(i)[j] == '1') wynik.at(j)++;
-				cout << "Wynik at " << j << ": " << wynik.at(j) << " " << endl;
+				//cout << "Wynik at " << j << ": " << wynik.at(j) << " " << endl;
 			}
 
 			//if (parityMatrix.at(i)[0] == '1') wynik1++;
@@ -320,7 +323,7 @@ void hammingAlgorithm(string input) {
 			else resultMatrix.append("0");
 		}
 
-		cout << resultMatrix << endl;
+	//	cout << resultMatrix << endl;
 
 		//if (wynik1 % 2 == 1) resultMatrix = "1";
 		//else resultMatrix = "0";
@@ -336,7 +339,8 @@ void hammingAlgorithm(string input) {
 			int countr = 0;
 			for (int i = 0; i < inputLength + parityBitsNumber; i++) {
 				if ((fmod(log2(i + 1), 1.0)) == 0) {
-					bitWord.erase(countr, 1);
+					if (i == (inputLength + parityBitsNumber - 1)) cout << "Since bit code length = possible parity bit, this will not be erased!" << endl;
+					else bitWord.erase(countr, 1);
 				}
 				else countr++;
 			}
@@ -374,7 +378,8 @@ void hammingAlgorithm(string input) {
 			int countr = 0;
 			for (int i = 0; i < inputLength + parityBitsNumber; i++) {
 				if ((fmod(log2(i + 1), 1.0)) == 0) {
-					bitWord.erase(countr, 1);
+					if (i == (inputLength + parityBitsNumber - 1)) cout << "Since bit code length = possible parity bit, this will not be erased!" << endl;
+					else bitWord.erase(countr, 1);
 				} else countr++;
 			}
 
@@ -402,7 +407,7 @@ int main() {
 	//cout << "Enter 4-signs bit code: " << endl;
 	//cin >> bitCode;
 
-	bitCode = generateRandom(8);
+	bitCode = generateRandom(9);
 	//bitCode = "8";
 	cout << "Generated bitCode: " << bitCode << endl;
 
