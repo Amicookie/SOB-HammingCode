@@ -31,6 +31,7 @@ void MainWindow::on_StartButton_clicked()
     if (ok==true) ui->insert->display(bin);
     std::string bitCode = v.toStdString();
     Hamming* x = new Hamming(bitCode);
+    if(x->IsEmpty(bitCode)) ui->PoleTekstowe->setText("U R STOOPID :/");
 
 }
 

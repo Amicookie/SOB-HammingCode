@@ -14,8 +14,7 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    hamming.cpp \
-    primecode.cpp
+    hamming.cpp
 
 HEADERS  += mainwindow.h \
     hamming.h
