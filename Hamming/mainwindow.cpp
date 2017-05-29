@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "hamming.h"
 #include <QtMath>
+#include <string>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -27,6 +29,9 @@ void MainWindow::on_StartButton_clicked()
     if (ok==true) ui->insert->display(dec);
     int bin = v.toInt(&ok, 2);
     if (ok==true) ui->insert->display(bin);
+    std::string bitCode = v.toStdString();
+    Hamming* x = new Hamming(bitCode);
+
 }
 
 void MainWindow::on_RandomButton_clicked()

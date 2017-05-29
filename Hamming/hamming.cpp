@@ -12,7 +12,7 @@
 
 using namespace std;
 
-Hamming::Hamming()
+Hamming::Hamming(string bitCode)
 {
     bitCode = this->bitCode;
 }

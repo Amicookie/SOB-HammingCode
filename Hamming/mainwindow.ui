@@ -237,23 +237,6 @@
      <pixmap>../build-Hamming-Desktop_Qt_5_6_2_MinGW_32bit-Debug/Hamming.png</pixmap>
     </property>
    </widget>
-   <widget class="QCalendarWidget" name="calendarWidget">
-    <property name="geometry">
-     <rect>
-      <x>280</x>
-      <y>150</y>
-      <width>248</width>
-      <height>183</height>
-     </rect>
-    </property>
-    <property name="selectedDate">
-     <date>
-      <year>5000</year>
-      <month>5</month>
-      <day>2</day>
-     </date>
-    </property>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

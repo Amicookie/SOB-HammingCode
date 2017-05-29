@@ -17,7 +17,7 @@ class Hamming
 {
     string bitCode;
 public:
-    Hamming();
+    Hamming(string bitCode);
     ~Hamming();
     template<class T> string valueToString(T value);
     template<class T> T stringToValue(string str);
