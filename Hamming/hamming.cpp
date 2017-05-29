@@ -32,15 +32,9 @@ T Hamming::stringToValue(string str) {
     return value;
 }
 
-string Hamming::mistake(string data) {
+string Hamming::mistake(string data, int rn) {
     srand(time(NULL));
-    int r = rand() % 2;
-    cout << "Does the error occur: " << r;
-    if (r == 1)
-    {
         int l = data.length();
-        int rn = rand() % 4 + 1;
-        cout << endl << "How many bits: " << rn;
         for (int i = 0; i<rn; i++) {
             int rd = rand() % l;
             cout << endl << "Bit: " << rd + 1;
@@ -48,10 +42,9 @@ string Hamming::mistake(string data) {
                 data[rd] = '0';
             else
                 data[rd] = '1';
-            cout << endl << data;
-        }
-    }
-    return data;
+            }
+        cout << endl << data;
+        return data;
 }
 
 string Hamming::Dec2Bin(int n) {
@@ -104,6 +97,8 @@ string Hamming::generateRandom(int length) {
 
     for (int i = 0; i<length; i++) {
         random = rand() % 2;
+        //cout << "Random generated nr: " << random << endl;
+        //value += to_string(random);
         value += valueToString(random);
     }
     return value;
@@ -111,191 +106,246 @@ string Hamming::generateRandom(int length) {
 
 void Hamming::hammingAlgorithm(string input) {
 
-    //hamming code (7,4) - we can only have an input of 1-4 bits!
-    if (input == "" || input.empty()) {
-        cout << "We cannot use Hamming Algorithm on empty string!" << endl;
+//    //hamming code (7,4) - we can only have an input of 1-4 bits!
+//    if (input == "" || input.empty()) {
+//        cout << "We cannot use Hamming Algorithm on empty string!" << endl;
 
-    } else {
+//    } else {
 
-        int inputLength = input.length();
-        string bitWord = "";
-        vector<int> elementsWithValueOfOne;
-
-
-        int parityBitsNumber = 0;
-
-        if (inputLength == 1) parityBitsNumber = 2;
-        else if (inputLength > 1 && inputLength <= 4) parityBitsNumber = 3;
-        else if (inputLength > 4 && inputLength <= 11) parityBitsNumber = 4;
-        else if (inputLength > 11 && inputLength <= 26) parityBitsNumber = 5;
-        else if (inputLength > 26 && inputLength <= 57) parityBitsNumber = 6;
-        else if (inputLength > 57 && inputLength <= 120) parityBitsNumber = 7;
-        else if (inputLength > 120 && inputLength <= 247) parityBitsNumber = 8;
+//        int inputLength = input.length();
+//        string bitWord = "";
+//        vector<int> elementsWithValueOfOne;
 
 
+//        int parityBitsNumber = 0;
 
-        //control bits are on the positions of power of 2
-        int counter = inputLength - 1;
-        for (int i = 0; i < inputLength + parityBitsNumber; i++) {
-
-            if ((fmod(log2(i + 1), 1.0)) == 0) {
-                bitWord.append("0");
-            } else {
-                bitWord.append(valueToString(input[counter]));
-                counter--;
-            }
-        }
-
-        for (int i = 0; i < inputLength + parityBitsNumber; i++) {
-            if (bitWord[i] == '1') {
-                elementsWithValueOfOne.push_back(i + 1);
-            }
-        }
-
-        cout << "Bit word (with zeros at parity): " << bitWord << endl;
-
-        string zmienna;
-        vector<string> parityMatrix;
-        vector<int> wynik(8);
-        string resultMatrix;
-
-        for (unsigned i = 0; i < 8; i++) {
-            wynik.at(i) = 0;
-        }
-
-        cout << "Elements with value of 1: " << elementsWithValueOfOne << endl;
-
-        for (unsigned i = 0; i < elementsWithValueOfOne.size(); i++) {
-
-            zmienna = Dec2Bin(elementsWithValueOfOne.at(i));
-            parityMatrix.push_back(zmienna);
-            for (unsigned j = 0; j < parityMatrix.at(i).length(); j++) {
-
-                if (parityMatrix.at(i)[j] == '1') wynik.at(j)++;
-            }
-
-        }
-
-
-        for (unsigned i = 0; i < parityMatrix.at(0).length(); i++) {
-            if (wynik.at(i) % 2 == 1) resultMatrix.append("1");
-            else resultMatrix.append("0");
-        }
+//        if (inputLength == 1) parityBitsNumber = 2;
+//        else if (inputLength > 1 && inputLength <= 4) parityBitsNumber = 3;
+//        else if (inputLength > 4 && inputLength <= 11) parityBitsNumber = 4;
+//        else if (inputLength > 11 && inputLength <= 26) parityBitsNumber = 5;
+//        else if (inputLength > 26 && inputLength <= 57) parityBitsNumber = 6;
+//        else if (inputLength > 57 && inputLength <= 120) parityBitsNumber = 7;
+//        else if (inputLength > 120 && inputLength <= 247) parityBitsNumber = 8;
 
 
 
-        cout << resultMatrix << endl;
+//        //control bits are on the positions of power of 2
+//        int counter = inputLength - 1;
+//        for (int i = 0; i < inputLength + parityBitsNumber; i++) {
 
-        int counter2 = resultMatrix.length() - 1;
-        for (int i = 0; i < inputLength + parityBitsNumber; i++) {
-            if ((fmod(log2(i + 1), 1.0)) == 0) {
-                bitWord[i] = resultMatrix[counter2];
-                counter2--;
-            }
-        }
+//            if ((fmod(log2(i + 1), 1.0)) == 0) {
+//                //if (i == (inputLength + parityBitsNumber - 1)) {
+//                //	bitWord.append(valueToString(input[counter]));
+//                //	cout << "Since our code is only " << inputLength << " characters long, we don't append another 0 on position " << i+1 << "!" << endl;
+//                //	counter--;
+//                //} else
+//                bitWord.append("0");
+//            } else {
+//                bitWord.append(valueToString(input[counter]));
+//                counter--;
+//            }
+//        }
 
-        cout << "Bit word (complete, with parity bits): " << bitWord << endl;
+//        //	cout << bitWord[1] << endl;
 
-        bitWord = mistake(bitWord);
-        cout << endl;
+//        for (int i = 0; i < inputLength + parityBitsNumber; i++) {
+//            if (bitWord[i] == '1') {
+//                elementsWithValueOfOne.push_back(i + 1);
+//            }
+//        }
 
-        elementsWithValueOfOne.clear();
-        parityMatrix.clear();
+//        cout << "Bit word (with zeros at parity): " << bitWord << endl;
 
-        for (int i = 0; i < inputLength + parityBitsNumber; i++) {
-            if (bitWord[i] == '1') {
-                elementsWithValueOfOne.push_back(i + 1);
-            }
-        }
+//        string zmienna;
+//        vector<string> parityMatrix;
+//        vector<int> wynik(8);
+//        //int wynik1 = 0;
+//        //int wynik2 = 0;
+//        //int wynik3 = 0;
+//        string resultMatrix;
 
-        for (unsigned i = 0; i < 8; i++) {
-            wynik.at(i) = 0;
-        }
+//        for (unsigned i = 0; i < 8; i++) {
+//            wynik.at(i) = 0;
+//            //cout << wynik.at(i) << " ";
+//        }
 
-        for (unsigned i = 0; i < elementsWithValueOfOne.size(); i++) {
+//        cout << "Elements with value of 1: " << elementsWithValueOfOne << endl;
 
-            zmienna = Dec2Bin(elementsWithValueOfOne.at(i));
-            parityMatrix.push_back(zmienna);
+//        for (unsigned i = 0; i < elementsWithValueOfOne.size(); i++) {
 
-            for (unsigned j = 0; j < parityMatrix.at(i).length(); j++) {
+//            zmienna = Dec2Bin(elementsWithValueOfOne.at(i));
+//            parityMatrix.push_back(zmienna);
+//            //cout << parityMatrix << endl;
+//            for (unsigned j = 0; j < parityMatrix.at(i).length(); j++) {
 
-                if (parityMatrix.at(i)[j] == '1') wynik.at(j)++;
-            }
+//                //while (parityMatrix.at(i)[j] == '0') continue;
+//                if (parityMatrix.at(i)[j] == '1') wynik.at(j)++;
+//                //cout << wynik.at(j) << " ";
+//            }
 
-        }
-
-
-        resultMatrix.clear();
-
-        for (unsigned i = 0; i < parityMatrix.at(0).length(); i++) {
-            if (wynik.at(i) % 2 == 1) resultMatrix.append("1");
-            else resultMatrix.append("0");
-        }
+//            //wynik = 0;
+//            //if (parityMatrix.at(i)[0] == '1') wynik1++;
+//            //if (parityMatrix.at(i)[1] == '1') wynik2++;
+//            //if (parityMatrix.at(i)[2] == '1') wynik3++;
+//        }
 
 
-        if (resultMatrix == "00000000") {
-            cout << "There were no mistakes found in the Hamming Word." << endl;
-            cout << "Proceeding with decoding..." << endl;
+//        for (unsigned i = 0; i < parityMatrix.at(0).length(); i++) {
+//            if (wynik.at(i) % 2 == 1) resultMatrix.append("1");
+//            else resultMatrix.append("0");
+//        }
 
-            int countr = 0;
-            for (int i = 0; i < inputLength + parityBitsNumber; i++) {
-                if ((fmod(log2(i + 1), 1.0)) == 0) {
-                    bitWord.erase(countr, 1);
-                }
-                else countr++;
-            }
 
-            reverse(bitWord.begin(), bitWord.end());
 
-            cout << bitWord << endl;
+//        cout << resultMatrix << endl;
 
-            if (bitWord == input) {
-                cout << "Decoded bit word: " << bitWord << endl;
-            }
-            else {
-                cout << "We have occurred an error in decoding!" << endl;
-            }
+//        //if (wynik1 % 2 == 1) resultMatrix = "1";
+//    //	else resultMatrix = "0";
+//        //if (wynik2 % 2 == 1) resultMatrix.append("1");
+//        //else resultMatrix.append("0");
+//        //if (wynik3 % 2 == 1) resultMatrix.append("1");
+//        //else resultMatrix.append("0");
 
-        } else {
+//        //	cout << resultMatrix << endl;
 
-            int positionValue = Bin2Dec(resultMatrix);
+//        int counter2 = resultMatrix.length() - 1;
+//        for (int i = 0; i < inputLength + parityBitsNumber; i++) {
+//            if ((fmod(log2(i + 1), 1.0)) == 0) {
+//                bitWord[i] = resultMatrix[counter2];
+//                counter2--;
+//            }
+//        }
 
-            cout << "There was a mistake in the Hamming Word occurring at: " << positionValue << " position." << endl;
+//        cout << "Bit word (complete, with parity bits): " << bitWord << endl;
 
-            char liedBit = bitWord[positionValue - 1];
+//        bitWord = mistake(bitWord);
+//        cout << endl;
 
-            cout << "Your mistaken bit's value was: " << liedBit << endl;
+//        elementsWithValueOfOne.clear();
+//        parityMatrix.clear();
+//        //wynik.clear();
 
-            if (liedBit == '0') liedBit = '1';
-            else if (liedBit == '1') liedBit = '0';
+//        for (int i = 0; i < inputLength + parityBitsNumber; i++) {
+//            if (bitWord[i] == '1') {
+//                elementsWithValueOfOne.push_back(i + 1);
+//            }
+//        }
 
-            bitWord[positionValue - 1] = liedBit;
+//        for (unsigned i = 0; i < 8; i++) {
+//            wynik.at(i) = 0;
+//            //cout << wynik.at(i) << " ";
+//        }
+//        //cout << elementsWithValueOfOne << endl;
 
-            cout << "Your mistaken bit has been changed to: " << liedBit << endl;
-            cout << "Proceeding with decoding..." << endl;
+//        //wynik1 = 0;
+//        //wynik2 = 0;
+//        //wynik3 = 0;
 
-            int countr = 0;
-            for (int i = 0; i < inputLength + parityBitsNumber; i++) {
-                if ((fmod(log2(i + 1), 1.0)) == 0) {
-                    bitWord.erase(countr, 1);
-                } else countr++;
-            }
+//        for (unsigned i = 0; i < elementsWithValueOfOne.size(); i++) {
 
-            reverse(bitWord.begin(), bitWord.end());
+//            zmienna = Dec2Bin(elementsWithValueOfOne.at(i));
+//            parityMatrix.push_back(zmienna);
+//            //cout << parityMatrix << endl;
 
-            cout << bitWord << endl;
+//            for (unsigned j = 0; j < parityMatrix.at(i).length(); j++) {
 
-            if (bitWord == input) {
-                cout << "Decoded bit word: " << bitWord << endl;
-            } else {
-                cout << "We have occurred an error in decoding!" << endl;
-            }
-        }
-    }
+//                //while (parityMatrix.at(i)[j] == '0') continue;
+//                if (parityMatrix.at(i)[j] == '1') wynik.at(j)++;
+//                //cout << "Wynik at " << j << ": " << wynik.at(j) << " " << endl;
+//            }
+
+//            //if (parityMatrix.at(i)[0] == '1') wynik1++;
+//            //if (parityMatrix.at(i)[1] == '1') wynik2++;
+//            //if (parityMatrix.at(i)[2] == '1') wynik3++;
+//        }
+
+//        //cout << parityMatrix << endl;
+
+//        resultMatrix.clear();
+
+//        for (unsigned i = 0; i < parityMatrix.at(0).length(); i++) {
+//            if (wynik.at(i) % 2 == 1) resultMatrix.append("1");
+//            else resultMatrix.append("0");
+//        }
+
+//    //	cout << resultMatrix << endl;
+
+//        //if (wynik1 % 2 == 1) resultMatrix = "1";
+//        //else resultMatrix = "0";
+//        //if (wynik2 % 2 == 1) resultMatrix.append("1");
+//        //else resultMatrix.append("0");
+//        //if (wynik3 % 2 == 1) resultMatrix.append("1");
+//        //else resultMatrix.append("0");
+
+//        if (resultMatrix == "00000000") {
+//            cout << "There were no mistakes found in the Hamming Word." << endl;
+//            cout << "Proceeding with decoding..." << endl;
+
+//            int countr = 0;
+//            for (int i = 0; i < inputLength + parityBitsNumber; i++) {
+//                if ((fmod(log2(i + 1), 1.0)) == 0) {
+//                    //if (i == (inputLength + parityBitsNumber - 1)) cout << "Since bit code length = possible parity bit, this will not be erased!" << endl;
+//                    //else
+//                    bitWord.erase(countr, 1);
+//                }
+//                else countr++;
+//            }
+
+//            reverse(bitWord.begin(), bitWord.end());
+//            //bitWord.resize(4);
+
+//            cout << bitWord << endl;
+
+//            if (bitWord == input) {
+//                cout << "Decoded bit word: " << bitWord << endl;
+//            }
+//            else {
+//                cout << "We have occurred an error in decoding!" << endl;
+//            }
+
+//        } else {
+
+//            int positionValue = Bin2Dec(resultMatrix);
+
+//            cout << "There was a mistake in the Hamming Word occurring at: " << positionValue << " position." << endl;
+
+//            char liedBit = bitWord[positionValue - 1];
+
+//            cout << "Your mistaken bit's value was: " << liedBit << endl;
+
+//            if (liedBit == '0') liedBit = '1';
+//            else if (liedBit == '1') liedBit = '0';
+
+//            bitWord[positionValue - 1] = liedBit;
+
+//            cout << "Your mistaken bit has been changed to: " << liedBit << endl;
+//            cout << "Proceeding with decoding..." << endl;
+
+//            int countr = 0;
+//            for (int i = 0; i < inputLength + parityBitsNumber; i++) {
+//                if ((fmod(log2(i + 1), 1.0)) == 0) {
+//                    //if (i == (inputLength + parityBitsNumber - 1)) cout << "Since bit code length = possible parity bit, this will not be erased!" << endl;
+//                    //else
+//                    bitWord.erase(countr, 1);
+//                } else countr++;
+//            }
+
+//            reverse(bitWord.begin(), bitWord.end());
+
+//            cout << bitWord << endl;
+
+//            if (bitWord == input) {
+//                cout << "Decoded bit word: " << bitWord << endl;
+//            } else {
+//                cout << "We have occurred an error in decoding!" << endl;
+//            }
+//        }
+//    }
 }
 
 bool Hamming::IsEmpty(string input) {
     if (input == "" || input.empty())
         return true;
+    //cout << "We cannot use Hamming Algorithm on empty string!" << endl;
     else return false;
 }

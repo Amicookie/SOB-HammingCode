@@ -21,7 +21,7 @@ public:
     ~Hamming();
     template<class T> string valueToString(T value);
     template<class T> T stringToValue(string str);
-    string mistake(string data);
+    string mistake(string data, int rn);
     string Dec2Bin(int n);
     int Bin2Dec(string m);
     string generateRandom(int length);
