@@ -75,7 +75,7 @@ string MainWindow::mistake(string data, int rn) {
 			s << *j << " "; 
 		 }
 		 bity = s.str();
-		 ui->label_9->setText(ui->label_9->text() + bity);
+		 ui->label_9->setText(ui->label_9->text() + QString::fromStdString(bity));
 
         reverse(data.begin(), data.end());
         ui->label_9->setText(ui->label_9->text() + "\nOur current data: " + QString::fromStdString(data)+"\n");
