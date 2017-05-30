@@ -67,16 +67,15 @@ string MainWindow::mistake(string data, int rn) {
 
      } else {
          ui->label_9->setText("Bits changed: ");
-         //cout << "Bits changed: ";
-
          vector<int>::iterator j;
-         for(j=bits.begin(); j!=bits.end(); j++)
-            {
-             temp = *j;
-             ui->label_9->setText(ui->label_9->text() + temp + " ");
-               // cout << *j << " ";
-         }
-
+         string bity="";
+		 stringstream s;
+		 for(j=bits.begin(); j!=bits.end(); j++)
+    	 {
+			s << *j << " "; 
+		 }
+		 bity = s.str();
+		 ui->label_9->setText(ui->label_9->text() + bity);
 
         reverse(data.begin(), data.end());
         ui->label_9->setText(ui->label_9->text() + "\nOur current data: " + QString::fromStdString(data)+"\n");
