@@ -148,12 +148,6 @@ void MainWindow::hammingAlgorithm(string input) {
 
         ui->label_9->setText("We cannot use Hamming Algorithm on empty string!");
 
-    } else if (stringToValue<int>(input) == 0) {
-        QPalette palette = ui->label_9->palette();
-         palette.setColor(ui->label_9->foregroundRole(), Qt::red);
-        ui->label_9->setPalette(palette);
-
-        ui->label_9->setText("We cannot use Hamming Algorithm on zero!");
     } else {
 
         int inputLength = input.length();
