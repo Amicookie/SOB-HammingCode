@@ -46,18 +46,46 @@ T MainWindow::stringToValue(string str) {
 
 string MainWindow::mistake(string data, int rn) {
     srand(time(NULL));
-        int l = data.length();
-        for (int i = 0; i<rn; i++) {
-            int rd = rand() % l;
-            //cout << endl << "Bit: " << rd + 1;
-            if (data[rd] == '1')
-                data[rd] = '0';
-            else
-                data[rd] = '1';
-            }
-        //cout << endl << data;
-        return data;
-}
+    int l = data.length();
+    int temp;
+    if (rn<=l) {
+     int i = 0;
+     vector<int> bits;
+     while(i<rn) {
+      int rd = rand() % l;
+      if(!(std::find(bits.begin(), bits.end(), (rd+1)) != bits.end())) {
+       bits.push_back(rd+1);
+          if (data[rd] == '1')
+        data[rd] = '0';
+       else
+        data[rd] = '1';
+       i++;
+      }
+     }
+
+     if(bits.size()==0){
+
+     } else {
+         ui->label_9->setText("Bits changed: ");
+         //cout << "Bits changed: ";
+
+         vector<int>::iterator j;
+         for(j=bits.begin(); j!=bits.end(); j++)
+            {
+             temp = *j;
+             ui->label_9->setText(ui->label_9->text() + temp + " ");
+               // cout << *j << " ";
+         }
+
+
+        reverse(data.begin(), data.end());
+        ui->label_9->setText(ui->label_9->text() + "\nOur current data: " + QString::fromStdString(data)+"\n");
+        reverse(data.begin(), data.end());
+     }
+    }
+   // cout << endl << data;
+    return data;
+   }
 
 
 string MainWindow::Dec2BinNoZeros(int n) {
