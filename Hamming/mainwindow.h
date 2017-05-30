@@ -19,6 +19,7 @@ public:
     template<class T> T stringToValue(std::string str);
     std::string mistake(std::string data, int rn);
     std::string Dec2Bin(int n);
+    std::string Dec2BinNoZeros(int n);
     int Bin2Dec(std::string m);
     std::string generateRandom(int length);
     void hammingAlgorithm(std::string input);
@@ -30,8 +31,12 @@ private slots:
 
     void on_RandomButton_clicked();
 
+    void on_StartButton_2_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
+
+
 
 #endif // MAINWINDOW_H
