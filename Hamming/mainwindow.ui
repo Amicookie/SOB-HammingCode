@@ -839,6 +839,9 @@ color:#ffffff;</string>
     <property name="text">
      <string/>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
    <zorder>frame_5</zorder>
    <zorder>frame_3</zorder>

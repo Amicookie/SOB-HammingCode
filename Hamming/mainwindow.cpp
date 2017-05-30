@@ -427,6 +427,8 @@ void MainWindow::on_Quit_clicked()
 void MainWindow::on_StartButton_clicked()
 {
     QString v = ui->PoleTekstowe->text();
+    bool ok;
+    v.toInt(&ok, 2);
 
     string bitCode = v.toStdString();
 
@@ -437,8 +439,18 @@ void MainWindow::on_StartButton_clicked()
     ui->label_9->setText("");
     ui->label_7->setText("");
     ui->Bit->setText("");
+    ui->bitsNumbers->setText("");
+
     ui->PoleTekstowe_2->setText(QString::number(bitCodeInt));
-    hammingAlgorithm(bitCode);
+
+    if (ok == false) {
+        QPalette palette = ui->label_9->palette();
+         palette.setColor(ui->label_9->foregroundRole(), Qt::red);
+        ui->label_9->setPalette(palette);
+
+        ui->label_9->setText("The input is not binary! ");
+    } else
+        hammingAlgorithm(bitCode);
 }
 
 void MainWindow::on_RandomButton_clicked()
@@ -471,8 +483,16 @@ void MainWindow::on_StartButton_2_clicked()
     ui->label_9->setText("");
     ui->label_7->setText("");
     ui->Bit->setText("");
+    ui->bitsNumbers->setText("");
     ui->PoleTekstowe->setText(QString::fromStdString(bitCode));
 
-    hammingAlgorithm(bitCode);
+    if (ok == false) {
+        QPalette palette = ui->label_9->palette();
+         palette.setColor(ui->label_9->foregroundRole(), Qt::red);
+        ui->label_9->setPalette(palette);
+
+        ui->label_9->setText("The input is not decimal! ");
+    } else
+        hammingAlgorithm(bitCode);
 
 }
