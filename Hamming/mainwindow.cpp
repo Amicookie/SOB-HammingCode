@@ -207,21 +207,24 @@ void MainWindow::hammingAlgorithm(string input) {
 
         //cout << "Elements with value of 1: " << elementsWithValueOfOne << endl;
 
-        for (unsigned i = 0; i < elementsWithValueOfOne.size(); i++) {
+        if (elementsWithValueOfOne.size() == 0) {
+            resultMatrix = "00000000";
+        } else {
+            for (unsigned i = 0; i < elementsWithValueOfOne.size(); i++) {
 
-            zmienna = Dec2Bin(elementsWithValueOfOne.at(i));
-            parityMatrix.push_back(zmienna);
-            for (unsigned j = 0; j < parityMatrix.at(i).length(); j++) {
-                if (parityMatrix.at(i)[j] == '1') wynik.at(j)++;
+                zmienna = Dec2Bin(elementsWithValueOfOne.at(i));
+                parityMatrix.push_back(zmienna);
+                for (unsigned j = 0; j < parityMatrix.at(i).length(); j++) {
+                    if (parityMatrix.at(i)[j] == '1') wynik.at(j)++;
+                }
+            }
+
+
+            for (unsigned i = 0; i < parityMatrix.at(0).length(); i++) {
+                if (wynik.at(i) % 2 == 1) resultMatrix.append("1");
+                else resultMatrix.append("0");
             }
         }
-
-
-        for (unsigned i = 0; i < parityMatrix.at(0).length(); i++) {
-            if (wynik.at(i) % 2 == 1) resultMatrix.append("1");
-            else resultMatrix.append("0");
-        }
-
         //cout << resultMatrix << endl;
 
 
@@ -260,18 +263,21 @@ void MainWindow::hammingAlgorithm(string input) {
             wynik.at(i) = 0;
         }
 
-        for (unsigned i = 0; i < elementsWithValueOfOne.size(); i++) {
+        if (elementsWithValueOfOne.size() == 0) {
+            parityMatrix.push_back("00000000");
+        } else {
+            for (unsigned i = 0; i < elementsWithValueOfOne.size(); i++) {
 
-            zmienna = Dec2Bin(elementsWithValueOfOne.at(i));
-            parityMatrix.push_back(zmienna);
+                zmienna = Dec2Bin(elementsWithValueOfOne.at(i));
+                parityMatrix.push_back(zmienna);
 
-            for (unsigned j = 0; j < parityMatrix.at(i).length(); j++) {
+                for (unsigned j = 0; j < parityMatrix.at(i).length(); j++) {
 
-                if (parityMatrix.at(i)[j] == '1') wynik.at(j)++;
+                    if (parityMatrix.at(i)[j] == '1') wynik.at(j)++;
+                }
+
             }
-
         }
-
 
         resultMatrix.clear();
 
