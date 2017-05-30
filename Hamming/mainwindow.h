@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <string>
 
 namespace Ui {
 class MainWindow;
@@ -14,6 +15,13 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    template<class T> std::string valueToString(T value);
+    template<class T> T stringToValue(std::string str);
+    std::string mistake(std::string data, int rn);
+    std::string Dec2Bin(int n);
+    int Bin2Dec(std::string m);
+    std::string generateRandom(int length);
+    void hammingAlgorithm(std::string input);
 
 private slots:
     void on_Quit_clicked();

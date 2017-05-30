@@ -13,10 +13,8 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    hamming.cpp
+        mainwindow.cpp
 
-HEADERS  += mainwindow.h \
-    hamming.h
+HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
