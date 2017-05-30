@@ -129,8 +129,6 @@ string MainWindow::generateRandom(int length) {
 
     for (int i = 0; i<length; i++) {
         random = rand() % 2;
-        //cout << "Random generated nr: " << random << endl;
-        //value += to_string(random);
         value += valueToString(random);
     }
 
@@ -424,7 +422,7 @@ void MainWindow::on_StartButton_clicked()
 {
     QString v = ui->PoleTekstowe->text();
 
-    std::string bitCode = v.toStdString();
+    string bitCode = v.toStdString();
 
     int bitCodeInt = Bin2Dec(bitCode);
 
@@ -439,31 +437,34 @@ void MainWindow::on_StartButton_clicked()
 
 void MainWindow::on_RandomButton_clicked()
 {
-    if(ui->RandomBoxer->value() ==  0){
-        //cos
-    } else {
-
-        int x = ui->RandomBoxer->value();
-        int number = qPow(2, ui->RandomBoxer->value());
-        int randomValue = qrand() % number;
-        string temp = Dec2Bin(randomValue);
-        string random = temp.substr(temp.length()-x,x);
-        ui->PoleTekstowe->setText(QString::fromStdString(random));
-        int randomInt = Bin2Dec(random);
-        ui->PoleTekstowe_2->setText(QString::number(randomInt));
-
-    }
+    int x = ui->RandomBoxer->value();
+    int number = qPow(2, ui->RandomBoxer->value());
+    int randomValue = 0;
+    //this code fragment is responsible for ensuring that the randomised bits are never equal to zero!
+    while (randomValue==0) randomValue = qrand() % number;
+    string temp = Dec2Bin(randomValue);
+    string random = temp.substr(temp.length()-x,x);
+    ui->PoleTekstowe->setText(QString::fromStdString(random));
+    int randomInt = Bin2Dec(random);
+    ui->PoleTekstowe_2->setText(QString::number(randomInt));
 }
 
 void MainWindow::on_StartButton_2_clicked()
 {
-    QString value = ui->PoleTekstowe_2->text();
+    QString v = ui->PoleTekstowe_2->text();
    // string bitCode = "";
-    string bitCode = Dec2BinNoZeros(stringToValue<int>(value.toStdString()));
+    bool ok;
+    string bitCode = Dec2BinNoZeros(v.toInt(&ok, 10));
 //    for(int i=0; i < temp.length(); i++){
 //        if(temp[i]=='0') continue;
 //        else bitCode += temp[i];
 //    }
+    //ui->temp->setText(+"Displayed value: " + QString::number(v.toInt(&ok, 10)));
+    ui->label_8->setText("");
+    ui->PoleRezultatu->setText("");
+    ui->label_9->setText("");
+    ui->label_7->setText("");
+    ui->Bit->setText("");
     ui->PoleTekstowe->setText(QString::fromStdString(bitCode));
 
     hammingAlgorithm(bitCode);
