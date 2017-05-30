@@ -278,6 +278,7 @@ void MainWindow::hammingAlgorithm(string input) {
         bitWord = mistake(bitWord, ui->errorBox->value());
         //cout << endl;
 
+
         elementsWithValueOfOne.clear();
         parityMatrix.clear();
 
@@ -320,7 +321,7 @@ void MainWindow::hammingAlgorithm(string input) {
             //cout << "There were no mistakes found in the Hamming Word." << endl;
             //cout << "Proceeding with decoding..." << endl;
 
-            ui->label_9->setText("There were no mistakes found in the Hamming Word.\nProceed with decoding...");
+            ui->label_9->setText(ui->label_9->text()+"There were no mistakes found in the Hamming Word.\nProceed with decoding...");
 
             int countr = 0;
             for (int i = 0; i < inputLength + parityBitsNumber; i++) {
@@ -361,7 +362,7 @@ void MainWindow::hammingAlgorithm(string input) {
             int positionValue = Bin2Dec(resultMatrix);
 
             if(positionValue-1>inputLength+parityBitsNumber-1) {
-                ui->label_9->setText("The position value was higher than the length of bit word.\nThere is possibility of an error for more than 1 bit.\nProceeding with decoding...\n");
+                ui->label_9->setText(ui->label_9->text()+"The position value was higher than the length of bit word.\nThere is possibility of an error for more than 1 bit.\nProceeding with decoding...\n");
 
                 int countr = 0;
                 for (int i = 0; i < inputLength + parityBitsNumber; i++) {
@@ -395,7 +396,7 @@ void MainWindow::hammingAlgorithm(string input) {
 
 
 
-            ui->label_9->setText(+"There was a mistake in the Hamming Word occurring at: "+ QString::number(positionValue) + " position.\n");
+            ui->label_9->setText(ui->label_9->text()+"There was a mistake in the Hamming Word occurring at: "+ QString::number(positionValue) + " position.\n");
 
             char liedBit = bitWord[positionValue - 1];
 
@@ -431,6 +432,11 @@ void MainWindow::hammingAlgorithm(string input) {
 
             if (bitWord == input) {
                 //cout << "Decoded bit word: " << bitWord << endl;
+                QPalette palette = ui->label_8->palette();
+                 palette.setColor(ui->label_8->foregroundRole(), Qt::green);
+                 ui->label_8->setPalette(palette);
+                 ui->frame_2->setHidden(false);
+                 ui->label_8->setText("We have successfully decoded the value!");
                 ui->PoleRezultatu->setText(bbitWord);
             } else {
                 QPalette palette = ui->label_8->palette();
@@ -446,7 +452,6 @@ void MainWindow::hammingAlgorithm(string input) {
     }
 
 }
-
 void MainWindow::on_Quit_clicked()
 {
     MainWindow::close();
