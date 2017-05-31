@@ -72,7 +72,7 @@ string MainWindow::mistake(string data, int rn) {
 		 stringstream s;
 		 for(j=bits.begin(); j!=bits.end(); j++)
     	 {
-			s << *j << " "; 
+            s << *j << "; ";
 		 }
 		 bity = s.str();
 		 ui->label_9->setText(ui->label_9->text() + QString::fromStdString(bity));
@@ -88,7 +88,7 @@ string MainWindow::mistake(string data, int rn) {
 
 
 string MainWindow::Dec2BinNoZeros(int n) {
-    long bin = 0;
+    long long bin = 0;
     string binStr;
     int r, i = 1;
 
@@ -104,7 +104,7 @@ string MainWindow::Dec2BinNoZeros(int n) {
 
 
 string MainWindow::Dec2Bin(int n) {
-    long bin = 0;
+    long long bin = 0;
     string binStr;
     int r, i = 1;
 
@@ -169,6 +169,11 @@ void MainWindow::hammingAlgorithm(string input) {
     if (input == "" || input.empty()) {
         //cout << "We cannot use Hamming Algorithm on empty string!" << endl;
 
+        ui->label_4->setHidden(true);
+        ui->label_7->setHidden(true);
+        ui->bitsNumbers->setHidden(true);
+        ui->label_12->setHidden(true);
+        ui->Bit->setHidden(true);
         QPalette palette = ui->label_9->palette();
          palette.setColor(ui->label_9->foregroundRole(), Qt::red);
         ui->label_9->setPalette(palette);
@@ -176,6 +181,16 @@ void MainWindow::hammingAlgorithm(string input) {
         ui->label_9->setText("We cannot use Hamming Algorithm on empty string!");
 
     } else {
+
+        ui->label_4->setHidden(false);
+        ui->label_7->setHidden(false);
+        ui->bitsNumbers->setHidden(false);
+        ui->label_12->setHidden(false);
+        ui->Bit->setHidden(false);
+        QPalette palette = ui->label_9->palette();
+         palette.setColor(ui->label_9->foregroundRole(), Qt::black);
+        ui->label_9->setPalette(palette);
+
 
         int inputLength = input.length();
         string bitWord = "";
@@ -473,9 +488,15 @@ void MainWindow::on_StartButton_clicked()
     ui->Bit->setText("");
     ui->bitsNumbers->setText("");
 
-    ui->PoleTekstowe_2->setText(QString::number(bitCodeInt));
+    if (ui->PoleTekstowe->text().isEmpty()); else ui->PoleTekstowe_2->setText(QString::number(bitCodeInt));
 
     if (ok == false) {
+        ui->frame_3->setHidden(false);
+        ui->label_4->setHidden(true);
+        ui->label_7->setHidden(true);
+        ui->bitsNumbers->setHidden(true);
+        ui->label_12->setHidden(true);
+        ui->Bit->setHidden(true);
         QPalette palette = ui->label_9->palette();
          palette.setColor(ui->label_9->foregroundRole(), Qt::red);
         ui->label_9->setPalette(palette);
@@ -516,9 +537,16 @@ void MainWindow::on_StartButton_2_clicked()
     ui->label_7->setText("");
     ui->Bit->setText("");
     ui->bitsNumbers->setText("");
-    ui->PoleTekstowe->setText(QString::fromStdString(bitCode));
+    if (ui->PoleTekstowe_2->text().isEmpty()); else ui->PoleTekstowe->setText(QString::fromStdString(bitCode));
 
     if (ok == false) {
+        ui->frame_3->setHidden(false);
+        ui->label_4->setHidden(true);
+        ui->label_7->setHidden(true);
+        ui->bitsNumbers->setHidden(true);
+        ui->label_12->setHidden(true);
+        ui->Bit->setHidden(true);
+
         QPalette palette = ui->label_9->palette();
          palette.setColor(ui->label_9->foregroundRole(), Qt::red);
         ui->label_9->setPalette(palette);
