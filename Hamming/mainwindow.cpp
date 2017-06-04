@@ -676,15 +676,15 @@ void MainWindow::on_editButton_clicked()
         QPalette palette = ui->label_9->palette();
         palette.setColor(ui->label_9->foregroundRole(), Qt::red);
         ui->label_9->setPalette(palette);
-        ui->label_9->setText("Error 204");
+        ui->label_9->setText("General Error");
     }
 }
 
 void MainWindow::on_saveButton_clicked()
 {
     QString fileName = QFileDialog::getSaveFileName(this,
-            tr("Save Hamming Code Result"), "",
-            tr("Hamming Code (*.ham);;All Files (*)"));
+            tr("Save your Hamming Code result"), "",
+            tr("Hamming Code File (*.ham);;All Files (*)"));
     if (fileName.isEmpty())
             return;
     else {
@@ -706,8 +706,8 @@ void MainWindow::on_loadButton_clicked()
     string bitCode;
     int bx;
     QString fileName = QFileDialog::getOpenFileName(this,
-            tr("Open Hamming Code Result"), "",
-            tr("Hamming Code (*.ham);;All Files (*)"));
+            tr("Save your Hamming Code result"), "",
+            tr("Hamming Code File (*.ham);;All Files (*)"));
     if (fileName.isEmpty())
             return;
     else {
