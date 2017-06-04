@@ -11,6 +11,10 @@
 #include <vector>
 #include <algorithm>
 #include <time.h>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QDataStream>
+#include <QIntValidator>
 
 using namespace std;
 
@@ -21,6 +25,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->frame_2->setHidden(true);
     ui->frame_3->setHidden(true);
+    ui->editLine->setHidden(true);
+    QValidator *validator = new QIntValidator(0, 1, this);
+    ui->editLine->setValidator(validator);
 
 }
 
@@ -69,13 +76,13 @@ string MainWindow::mistake(string data, int rn) {
          ui->label_9->setText("Bits changed: ");
          vector<int>::iterator j;
          string bity="";
-		 stringstream s;
-		 for(j=bits.begin(); j!=bits.end(); j++)
-    	 {
+         stringstream s;
+         for(j=bits.begin(); j!=bits.end(); j++)
+         {
             s << *j << "; ";
-		 }
-		 bity = s.str();
-		 ui->label_9->setText(ui->label_9->text() + QString::fromStdString(bity));
+         }
+         bity = s.str();
+         ui->label_9->setText(ui->label_9->text() + QString::fromStdString(bity));
 
         reverse(data.begin(), data.end());
         ui->label_9->setText(ui->label_9->text() + "\nOur current data: " + QString::fromStdString(data)+"\n");
@@ -87,47 +94,45 @@ string MainWindow::mistake(string data, int rn) {
    }
 
 
-string MainWindow::Dec2BinNoZeros(int n) {
-    long long bin = 0;
-    string binStr;
-    int r, i = 1;
+string MainWindow::Dec2BinNoZeros(long n) {
+    string bin;
+    int r;
 
     while (n != 0) {
         r = n % 2;
         n /= 2;
-        bin += r * i;
-        i *= 10;
+        bin.append(valueToString(r));
     }
-    binStr = valueToString(bin);
-    return binStr;
+    reverse(bin.begin(), bin.end());
+    return bin;
 }
 
 
-string MainWindow::Dec2Bin(int n) {
-    long long bin = 0;
+string MainWindow::Dec2Bin(long n) {
+    string bin;
     string binStr;
-    int r, i = 1;
+    int r;
 
     while (n != 0) {
         r = n % 2;
         n /= 2;
-        bin += r * i;
-        i *= 10;
+        bin.append(valueToString(r));
     }
+    reverse(bin.begin(), bin.end());
 
-    if (bin < 10) {
+    if (bin.size() == 1) {
         binStr = "0000000"; binStr.append(valueToString(bin));}
-    else if (bin < 100) {
+    else if (bin.size() == 2) {
         binStr = "000000"; binStr.append(valueToString(bin));}
-    else if (bin < 1000) {
+    else if (bin.size() == 3) {
         binStr = "00000"; binStr.append(valueToString(bin));}
-    else if (bin < 10000) {
+    else if (bin.size() == 4) {
         binStr = "0000"; binStr.append(valueToString(bin));}
-    else if (bin < 100000) {
+    else if (bin.size() == 5) {
         binStr = "000";	binStr.append(valueToString(bin));}
-    else if (bin < 1000000) {
+    else if (bin.size() == 6) {
         binStr = "00"; binStr.append(valueToString(bin));}
-    else if (bin < 10000000) {
+    else if (bin.size() == 7) {
         binStr = "0"; binStr.append(valueToString(bin));}
     else
         binStr = valueToString(bin);
@@ -135,9 +140,9 @@ string MainWindow::Dec2Bin(int n) {
     return binStr;
 }
 
-int MainWindow::Bin2Dec(string m) {
+long MainWindow::Bin2Dec(string m) {
     int n = stringToValue<int>(m);
-    int dec = 0, i = 0, r;
+    long dec = 0, i = 0, r;
     while (n != 0) {
         r = n % 10;
         n /= 10;
@@ -162,7 +167,7 @@ string MainWindow::generateRandom(int length) {
     return value;
 }
 
-void MainWindow::hammingAlgorithm(string input) {
+void MainWindow::hammingAlgorithm(string input, bool manualMistake) {
 
     ui->frame_3->setHidden(false);
 
@@ -174,8 +179,10 @@ void MainWindow::hammingAlgorithm(string input) {
         ui->bitsNumbers->setHidden(true);
         ui->label_12->setHidden(true);
         ui->Bit->setHidden(true);
+        ui->editLine->setHidden(true);
+        ui->editButton->setHidden(true);
         QPalette palette = ui->label_9->palette();
-         palette.setColor(ui->label_9->foregroundRole(), Qt::red);
+        palette.setColor(ui->label_9->foregroundRole(), Qt::red);
         ui->label_9->setPalette(palette);
 
         ui->label_9->setText("We cannot use Hamming Algorithm on empty string!");
@@ -187,6 +194,7 @@ void MainWindow::hammingAlgorithm(string input) {
         ui->bitsNumbers->setHidden(false);
         ui->label_12->setHidden(false);
         ui->Bit->setHidden(false);
+        ui->editButton->setHidden(false);
         QPalette palette = ui->label_9->palette();
          palette.setColor(ui->label_9->foregroundRole(), Qt::black);
         ui->label_9->setPalette(palette);
@@ -212,7 +220,7 @@ void MainWindow::hammingAlgorithm(string input) {
         int counter = inputLength - 1;
         int cnt = inputLength+parityBitsNumber-1;
         for (int i = 0; i < inputLength + parityBitsNumber; i++) {
-            bitNumbers += valueToString(cnt+1)+" ";
+            bitNumbers += "  "+valueToString(cnt+1);
             cnt--;
             if ((fmod(log2(i + 1), 1.0)) == 0) {
                 bitWord.append("x");
@@ -289,9 +297,50 @@ void MainWindow::hammingAlgorithm(string input) {
         reverse(temp2.begin(), temp2.end());
         ui->Bit->setText(QString::fromStdString(temp2));
 
-        bitWord = mistake(bitWord, ui->errorBox->value());
+        string editWord = bitWord;
+
+        if (!manualMistake) bitWord = mistake(bitWord, ui->errorBox->value());
+        else {
+            string edot = ui->editLine->text().toStdString();
+            reverse(edot.begin(), edot.end());
+            if (edot.length() != bitWord.length()) {
+                QPalette palette = ui->label_9->palette();
+                palette.setColor(ui->label_9->foregroundRole(), Qt::red);
+                ui->label_9->setPalette(palette);
+                ui->label_9->setText("Error - the bit word length does not compute.\n");
+                ui->frame_2->setHidden(true);
+                ui->PoleRezultatu->setText("");
+                return;
+            } else {
+                int coko = 0;
+                for (int i = 0; i < edot.length(); i++) {
+                    if (edot[i] == '0' || edot[i] == '1') {
+                        coko++;
+                    } else {
+                        coko--;
+                    }
+                } if (coko != edot.length()) {
+                    QPalette palette = ui->label_9->palette();
+                    palette.setColor(ui->label_9->foregroundRole(), Qt::red);
+                    ui->label_9->setPalette(palette);
+                    ui->label_9->setText("Error - the bit word contains illegal characters.\n");
+                    ui->frame_2->setHidden(true);
+                    ui->PoleRezultatu->setText("");
+                    return;
+
+                } else {
+                    bitWord = edot;
+                    ui->label_9->setText("The bitword changed. \nOur current data: " + ui->editLine->text() + ".\n");
+                }
+            }
+
+
+        }
+
         //cout << endl;
 
+        reverse(editWord.begin(), editWord.end());
+        ui->editLine->setText(QString::fromStdString(editWord));
 
         elementsWithValueOfOne.clear();
         parityMatrix.clear();
@@ -373,7 +422,7 @@ void MainWindow::hammingAlgorithm(string input) {
 
         } else {
 
-            int positionValue = Bin2Dec(resultMatrix);
+            long positionValue = Bin2Dec(resultMatrix);
 
             if(positionValue-1>inputLength+parityBitsNumber-1) {
                 ui->label_9->setText(ui->label_9->text()+"The position value was higher than the length of bit word.\nThere is possibility of an error for more than 1 bit.\nProceeding with decoding...\n");
@@ -474,12 +523,13 @@ void MainWindow::on_Quit_clicked()
 void MainWindow::on_StartButton_clicked()
 {
     QString v = ui->PoleTekstowe->text();
+    long NUMCAP = 100000000000;
     bool ok;
     v.toInt(&ok, 2);
 
     string bitCode = v.toStdString();
 
-    int bitCodeInt = Bin2Dec(bitCode);
+    long bitCodeInt = Bin2Dec(bitCode);
 
     ui->label_8->setText("");
     ui->PoleRezultatu->setText("");
@@ -487,6 +537,10 @@ void MainWindow::on_StartButton_clicked()
     ui->label_7->setText("");
     ui->Bit->setText("");
     ui->bitsNumbers->setText("");
+    ui->editLine->setHidden(true);
+    ui->editButton->setText("Edit");
+    ui->PoleTekstowe->setReadOnly(false);
+    ui->PoleTekstowe_2->setReadOnly(false);
 
     if (ui->PoleTekstowe->text().isEmpty()); else ui->PoleTekstowe_2->setText(QString::number(bitCodeInt));
 
@@ -497,17 +551,38 @@ void MainWindow::on_StartButton_clicked()
         ui->bitsNumbers->setHidden(true);
         ui->label_12->setHidden(true);
         ui->Bit->setHidden(true);
+        ui->editLine->setHidden(true);
+        ui->editButton->setHidden(true);
+        QPalette palette = ui->label_9->palette();
+         palette.setColor(ui->label_9->foregroundRole(), Qt::red);
+        ui->label_9->setPalette(palette);
+        ui->label_9->setText("The input is not binary! ");
+
+    } else if (v.toInt(&ok, 2) > NUMCAP) {
+        ui->frame_3->setHidden(false);
+        ui->label_4->setHidden(true);
+        ui->label_7->setHidden(true);
+        ui->bitsNumbers->setHidden(true);
+        ui->label_12->setHidden(true);
+        ui->Bit->setHidden(true);
+        ui->editLine->setHidden(true);
+        ui->editButton->setHidden(true);
         QPalette palette = ui->label_9->palette();
          palette.setColor(ui->label_9->foregroundRole(), Qt::red);
         ui->label_9->setPalette(palette);
 
-        ui->label_9->setText("The input is not binary! ");
+        ui->label_9->setText("The input is too big! ");
+
     } else
-        hammingAlgorithm(bitCode);
+        hammingAlgorithm(bitCode, 0);
 }
 
 void MainWindow::on_RandomButton_clicked()
 {
+    ui->editLine->setHidden(true);
+    ui->PoleTekstowe->setReadOnly(false);
+    ui->PoleTekstowe_2->setReadOnly(false);
+    ui->editButton->setText("Edit");
     int x = ui->RandomBoxer->value();
     int number = qPow(2, ui->RandomBoxer->value());
     int randomValue = 0;
@@ -516,13 +591,14 @@ void MainWindow::on_RandomButton_clicked()
     string temp = Dec2Bin(randomValue);
     string random = temp.substr(temp.length()-x,x);
     ui->PoleTekstowe->setText(QString::fromStdString(random));
-    int randomInt = Bin2Dec(random);
+    long randomInt = Bin2Dec(random);
     ui->PoleTekstowe_2->setText(QString::number(randomInt));
 }
 
 void MainWindow::on_StartButton_2_clicked()
 {
     QString v = ui->PoleTekstowe_2->text();
+    long NUMCAP = 100000000000;
    // string bitCode = "";
     bool ok;
     string bitCode = Dec2BinNoZeros(v.toInt(&ok, 10));
@@ -537,6 +613,10 @@ void MainWindow::on_StartButton_2_clicked()
     ui->label_7->setText("");
     ui->Bit->setText("");
     ui->bitsNumbers->setText("");
+    ui->editLine->setHidden(true);
+    ui->PoleTekstowe->setReadOnly(false);
+    ui->PoleTekstowe_2->setReadOnly(false);
+    ui->editButton->setText("Edit");
     if (ui->PoleTekstowe_2->text().isEmpty()); else ui->PoleTekstowe->setText(QString::fromStdString(bitCode));
 
     if (ok == false) {
@@ -546,13 +626,124 @@ void MainWindow::on_StartButton_2_clicked()
         ui->bitsNumbers->setHidden(true);
         ui->label_12->setHidden(true);
         ui->Bit->setHidden(true);
-
+        ui->editLine->setHidden(true);
+        ui->editButton->setHidden(true);
         QPalette palette = ui->label_9->palette();
          palette.setColor(ui->label_9->foregroundRole(), Qt::red);
         ui->label_9->setPalette(palette);
-
         ui->label_9->setText("The input is not decimal! ");
-    } else
-        hammingAlgorithm(bitCode);
 
+    } else if (v.toInt(&ok, 10) > NUMCAP) {
+        ui->frame_3->setHidden(false);
+        ui->label_4->setHidden(true);
+        ui->label_7->setHidden(true);
+        ui->bitsNumbers->setHidden(true);
+        ui->label_12->setHidden(true);
+        ui->Bit->setHidden(true);
+        ui->editLine->setHidden(true);
+        ui->editButton->setHidden(true);
+        QPalette palette = ui->label_9->palette();
+         palette.setColor(ui->label_9->foregroundRole(), Qt::red);
+        ui->label_9->setPalette(palette);
+        ui->label_9->setText("The input is too big! ");
+    } else
+        hammingAlgorithm(bitCode, 0);
+
+}
+
+void MainWindow::on_editButton_clicked()
+{
+    QString v = ui->PoleTekstowe->text();
+    bool ok;
+    v.toInt(&ok, 2);
+    string bitCode = v.toStdString();
+
+    if (ui->editButton->text() == "Edit") {
+        ui->editLine->setHidden(false);
+        ui->editButton->setText("Accept");
+        ui->PoleTekstowe->setReadOnly(true);
+        ui->PoleTekstowe_2->setReadOnly(true);
+        ui->errorBox->setValue(0);
+    } else if (ui->editLine->size() == ui->Bit->size()) {
+        ui->editLine->setHidden(true);
+        ui->editButton->setText("Edit");
+        ui->errorBox->setValue(0);
+        ui->PoleTekstowe->setReadOnly(false);
+        ui->PoleTekstowe_2->setReadOnly(false);
+        ui->label_9->setText("");
+        hammingAlgorithm(bitCode, 1);
+    } else {
+        QPalette palette = ui->label_9->palette();
+        palette.setColor(ui->label_9->foregroundRole(), Qt::red);
+        ui->label_9->setPalette(palette);
+        ui->label_9->setText("Error 204");
+    }
+}
+
+void MainWindow::on_saveButton_clicked()
+{
+    QString fileName = QFileDialog::getSaveFileName(this,
+            tr("Save Hamming Code Result"), "",
+            tr("Hamming Code (*.ham);;All Files (*)"));
+    if (fileName.isEmpty())
+            return;
+    else {
+        QFile file(fileName);
+        if (!file.open(QIODevice::WriteOnly)) {
+            QMessageBox::information(this, tr("Unable to open file"),
+                file.errorString());
+            return;
+    }
+    QDataStream out(&file);
+            out.setVersion(QDataStream::Qt_4_5);
+            out << ui->PoleTekstowe->text(), ui->RandomBoxer->text();
+    }
+}
+
+void MainWindow::on_loadButton_clicked()
+{
+    QString QbitCode;
+    string bitCode;
+    int bx;
+    QString fileName = QFileDialog::getOpenFileName(this,
+            tr("Open Hamming Code Result"), "",
+            tr("Hamming Code (*.ham);;All Files (*)"));
+    if (fileName.isEmpty())
+            return;
+    else {
+
+        QFile file(fileName);
+
+        if (!file.open(QIODevice::ReadOnly)) {
+            QMessageBox::information(this, tr("Unable to open file"),
+                file.errorString());
+            return;
+        }
+
+        QDataStream in(&file);
+        in.setVersion(QDataStream::Qt_4_5);
+        ui->PoleTekstowe->setText("");
+        in >> QbitCode, bx;
+        if (QbitCode.isEmpty()) {
+            QMessageBox::information(this, tr("Nothing in file"),
+                tr("The file you are attempting to open is empty."));
+        } else {
+            ui->PoleTekstowe->setText(QbitCode);
+            ui->RandomBoxer->setValue(bx);
+            bitCode = QbitCode.toStdString();
+            long bitCodeInt = Bin2Dec(bitCode);
+            if (ui->PoleTekstowe->text().isEmpty()); else ui->PoleTekstowe_2->setText(QString::number(bitCodeInt));
+            ui->label_8->setText("");
+            ui->PoleRezultatu->setText("");
+            ui->label_9->setText("");
+            ui->label_7->setText("");
+            ui->Bit->setText("");
+            ui->bitsNumbers->setText("");
+            ui->editLine->setHidden(true);
+            ui->PoleTekstowe->setReadOnly(false);
+            ui->PoleTekstowe_2->setReadOnly(false);
+            ui->editButton->setText("Edit");
+            hammingAlgorithm(bitCode, 0);
+        }
+    }
 }
